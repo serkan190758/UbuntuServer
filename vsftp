@@ -31,7 +31,11 @@ Upload işlemlerine izin vermek için aşağıdaki satırı konfigürasyona ekle
 
 write_enable=YES
 
-Daha sonrasında dosyayı kaydedip çıkalım.
+Chmod yetkisini açmak için;
+
+chmod_enable=YES
+
+Ekliyoruz sonrasında dosyayı kaydedip çıkalım.
 
 Şimdi vsFTPd daemon’ u başlatalım.
 
