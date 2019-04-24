@@ -1,0 +1,56 @@
+Yeni Kullanıcı Ekleme
+
+Sisteme size verilen şifre ve root kullanıcısı ile giriş yaptıktan sonra
+
+$ adduser yenikullanici
+
+ile kullanıcı oluşturmuş oluyoruz.
+
+$ usermod -aG sudo yenikullanici
+
+komutu ile de oluşturduğumuz kullanıcıya sudo yetkilerini vermiş olduk. Şimdi vsFTPd kurulum adımlarına bu oluşturduğumuz sudo haklı kullanıcı ile devam edeceğiz.
+vsFTPd Kurulumu
+
+Aşağıdaki komut yardımı ile vsFTPd kurulumunu yapabiliriz.
+
+apt-get install vsftpd
+
+Şimdi ayar dosyasına giriş yaparak bazı değişiklikler yapacağız.
+
+nano /etc/vsftpd.conf
+
+Default olarak vsFTPd anonim kullanıcılara erişim izni vermektedir ve bu durum da sisteminizde güvenlik zaafiyeti yaratabilmektedir. Aşağıdaki değişiklik ile öncelikle bu izni iptal edelim.
+
+anonymous_enable=NO
+
+Local kullanıcı ile girişe izin vermek için aşağıdaki satırı yorum satırı haline getiren başındaki # karakterini kaldırarak aşağıdaki konfigürasyonun içine dahil edelim.
+
+local_enable=YES
+
+Upload işlemlerine izin vermek için aşağıdaki satırı konfigürasyona ekleyeceğiz
+
+write_enable=YES
+
+Daha sonrasında dosyayı kaydedip çıkalım.
+
+Şimdi vsFTPd daemon’ u başlatalım.
+
+systemctl start vsftpd
+
+Şu anda local makinanızdan ftp sunucunuza erişim sağlayabilirsiniz.
+
+Eğer local kullanıcıların home dizininden ayrılmalarını önlemek isterseniz /etc/vsftpd.conf dosyasına giriş yaparak aşağıdaki satırı yorum satırından kaldırmanız gerekmeketedir.
+
+cd /etc/vsftpd.conf
+
+chroot_local_user=YES
+
+Daha sonrasında dosyayı kaydedip çıkıyoruz.
+
+vsFTPd’ de, chroot dizini yazılabilir olmamalıdır. Bu dizin üzerindeki bu izni aşağıdaki komut ile kaldırabiliriz.
+
+chmod a-w /home/user
+
+vsftpd.conf üzerinde yapacağınız tüm değişiklikler sonrası vsftpd daemon’ u restart etmemiz gerekmektedir.
+
+systemctl restart vsftpd
